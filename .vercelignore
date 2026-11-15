@@ -1,0 +1,8 @@
+.DS_Store
+.vercel
+
+# earlier flower experiments, no longer used by the site
+assets/media/flowers/cluster.*
+assets/media/flowers/sprig.*
+assets/media/flowers/corner.*
+assets/media/flowers/bush.*
