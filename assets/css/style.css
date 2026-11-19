@@ -473,6 +473,35 @@ sup.plus { font-family: var(--font-body); font-size: .9rem; vertical-align: supe
 .gallery_view img.is-active { clip-path: inset(0 0 0 0); z-index: 2; }
 .gallery .snav { margin: 1.5rem 0 0 9rem; }
 .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; width: 54%; margin: 9rem auto 0; }
+/* Our fleet: list of plants and machines with a live 3D turntable */
+.fleet { margin: 9rem calc(var(--gutter) + 6rem) 0; display: grid; grid-template-columns: 24rem 1fr; grid-template-areas: "head stage" "list stage"; column-gap: 3rem; align-items: start; }
+.fleet_head { grid-area: head; }
+.fleet_head .h4 { margin: 1.2rem 0 1rem; }
+.fleet_list { grid-area: list; margin: 2rem 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.fleet_list button { width: 100%; display: flex; align-items: baseline; gap: 1rem; padding: .55rem 0; border-bottom: 1px solid var(--line); text-align: left; opacity: .45; transition: opacity .4s, padding-left .4s; }
+.fleet_list button:hover, .fleet_list button.is-active { opacity: 1; }
+.fleet_list button.is-active { padding-left: .6rem; }
+.fleet_n { font-family: var(--font-display); font-variation-settings: "wdth" 62.5; font-weight: 500; font-size: 2rem; line-height: 1; min-width: 3.4rem; }
+.fleet_name { font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.fleet_stage { grid-area: stage; position: relative; aspect-ratio: 3 / 2; align-self: center; }
+.fleet_stage img, .fleet_stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.fleet_stage canvas { display: none; cursor: grab; touch-action: pan-y; }
+.fleet_stage canvas.is-dragging { cursor: grabbing; }
+.fleet.has-3d .fleet_stage canvas { display: block; }
+.fleet.has-3d .fleet_stage img { display: none; }
+.fleet_cap { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; gap: .9rem; pointer-events: none; }
+.fleet_cap i { width: 2.5rem; height: 1px; background: currentColor; opacity: .4; }
+.fleet_hint { opacity: .55; }
+.fleet:not(.has-3d) .fleet_cap i, .fleet:not(.has-3d) .fleet_hint { display: none; }
+.card--fleet .card_img img { object-fit: contain; background: var(--cream, #f3f3ec); }
+.fleet_count { margin-top: .6rem; font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.fleet_count span { font-family: var(--font-display); font-variation-settings: "wdth" 62.5; font-size: 2rem; font-weight: 500; letter-spacing: 0; margin-right: .3rem; }
+@media (max-width: 767px) {
+  .fleet { margin: 5rem var(--gutter) 0; display: block; }
+  .fleet_stage { margin-top: 1.5rem; }
+  .fleet_list { margin-top: 1.5rem; }
+  .fleet_n { font-size: 1.6rem; min-width: 3rem; }
+}
 .tiles div { aspect-ratio: 7 / 10; overflow: hidden; }
 .tiles img { width: 100%; height: 115%; object-fit: cover; }
 @media (max-width: 767px) {
@@ -703,3 +732,82 @@ sup.plus { font-family: var(--font-body); font-size: .9rem; vertical-align: supe
 
 
 }
+
+/* v4: leadership title is shown in-flow now that the pinned Foundation section is gone */
+.leaders_mtitle { display: block; padding-top: 9rem; }
+.leaders_mtitle .a2 { display: block; margin-top: -2.2rem; transform: rotate(-6deg); }
+@media (max-width: 767px) { .leaders_mtitle { padding-top: 5rem; } .leaders_mtitle .a2 { margin-top: -1.5rem; } }
+
+/* Mission on the light theme: navy type over a line-drawn alignment plan */
+.mission--light { color: var(--navy); }
+.mission--light .mission_media::after { background: linear-gradient(0deg, rgba(243,243,236,.96) 8%, rgba(243,243,236,.82) 38%, rgba(243,243,236,.25) 62%, rgba(243,243,236,.5) 100%); }
+.mission--light .mission_media img { opacity: .8; }
+
+/* v6: closing contact footer in the site's light editorial style */
+.footer.theme-dark { background: var(--navy); }
+.footer--contact { position: relative; min-height: 0; display: block; padding: 9rem 0 2.5rem; background: var(--cream, #f3f3ec); color: var(--navy); }
+.fc_bloom { width: 34rem; }
+.fc_head { position: relative; z-index: 4; text-align: center; padding: 0 var(--gutter); }
+.fc_title { margin: 1.4rem 0 0; line-height: .85; }
+.fc_title .h1 { display: block; }
+.fc_title .a2 { display: block; margin-top: -3.4rem; transform: rotate(-6deg); color: var(--plum); }
+.fc_head .p1 { max-width: 30rem; margin: 2.2rem auto 0; }
+.fc_grid { position: relative; z-index: 4; display: grid; grid-template-columns: 1fr 22rem 1fr; gap: 5rem; align-items: start; padding: 6rem calc(var(--gutter) + 6rem) 7rem; }
+.fc_label { padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.fc_form .form { margin-top: 2rem; grid-template-columns: 1fr 1fr; column-gap: 2rem; row-gap: 1.6rem; }
+.fc_form .field--wide, .fc_form .form > button { grid-column: 1 / -1; }
+.fc_form .field .l2 { opacity: .6; }
+.fc_form .field textarea { min-height: 4.5rem; }
+.fc_form .pill { margin-top: .6rem; }
+/* office photo in the same plum arch frame as the leadership portraits */
+.fc_photo { margin: -2rem 0 0; }
+.fc_arch { background: var(--plum); padding: 1.6rem 1.6rem 0; border-radius: 12rem 12rem 0 0; }
+.fc_arch img { display: block; width: 100%; aspect-ratio: 3 / 4.3; object-fit: cover; object-position: 50% 70%; border-radius: 11rem 11rem 0 0; }
+.fc_photo figcaption { margin-top: 1rem; text-align: center; opacity: .7; }
+.fc_details { margin: 2rem 0 0; }
+.fc_details dt { opacity: .6; margin-top: 1.5rem; }
+.fc_details dt:first-child { margin-top: 0; }
+.fc_details dd { margin: .45rem 0 0; }
+.fc_map { margin-top: 2.2rem; aspect-ratio: 16 / 10; border: 1px solid var(--line); border-radius: .75rem; background: rgba(23,35,59,.035); display: grid; place-items: center; text-align: center; overflow: hidden; }
+.fc_map p { opacity: .5; line-height: 1.8; }
+.fc_map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(1) contrast(.95); }
+.footer--contact .footer_bot { position: relative; z-index: 4; padding-top: 2rem; border-top: 1px solid var(--line); margin: 0 var(--gutter) 0 calc(var(--gutter) + 6rem); padding-left: 0; padding-right: 0; }
+@media (max-width: 767px) {
+  .footer--contact { padding-top: 6rem; }
+  .fc_bloom { width: 17rem; }
+  .fc_title .a2 { margin-top: -1.5rem; }
+  .fc_grid { grid-template-columns: 1fr; gap: 3.5rem; padding: 3.5rem var(--gutter) 4rem; }
+  .fc_form .form { grid-template-columns: 1fr; }
+  .fc_photo { margin: 0 auto; max-width: 16rem; }
+  .footer--contact .footer_bot { margin: 0 var(--gutter); }
+}
+
+/* soft blush wash where the Mission section meets the Company facts, echoing the flowers */
+.facts.theme-light { background:
+  radial-gradient(ellipse 58% 34rem at 100% 6rem, rgba(248,187,203,.42), rgba(248,187,203,0) 72%),
+  linear-gradient(180deg, rgba(248,187,203,0) 0, rgba(248,187,203,.26) 10rem, rgba(248,187,203,0) 34rem),
+  var(--cream, #f3f3ec); }
+
+/* company logo: header badge, preloader, footer */
+.badge_logo { position: absolute; left: 50%; top: 50%; width: 2.5rem; height: 2.5rem; transform: translate(-50%, -50%); border-radius: 50%; background: var(--cream, #f3f3ec); display: grid; place-items: center; box-shadow: 0 0 0 1px rgba(23,35,59,.08); }
+.badge_logo img { width: 78%; height: 78%; object-fit: contain; }
+.pre_logo { width: 6.5rem; height: 6.5rem; border-radius: 50%; background: var(--cream, #f3f3ec); display: grid; place-items: center; }
+.pre_logo img { width: 76%; height: 76%; object-fit: contain; }
+.footer_logo { width: 11rem; height: auto; margin-bottom: 1.2rem; }
+@media (max-width: 767px) { .footer_logo { width: 8rem; } .pre_logo { width: 5rem; height: 5rem; } }
+
+/* flowers sit flush with the section boundary: no offset past the edge and no tilt (the video itself sways) */
+.bloom--tl, .bloom--tr, .bloom--bl, .bloom--br { animation: none; rotate: none; }
+.bloom--tl, .page-top .bloom--tl { top: 0; }
+.bloom--tr, .leaders_bloom, .facts_bloom, .fc_bloom { top: 0; right: 0; }
+.bloom--tl { left: 0; }
+.page-top .bloom--tl { left: calc(-1 * (var(--gutter) + 6rem)); }
+.bloom--bl.vision_bloom { bottom: 0; left: 0; }
+
+/* opening arch + three-pillars section: pale petal blush instead of sky blue, to sit with the night hero and the flowers */
+:root { --petal: #f6e2e4; }
+.arch_shape { background: var(--petal); }
+.pillars.theme-brand { --bg: var(--petal); background: var(--petal); }
+
+/* Our Verticals: the corner flower sits behind the logo badge, so give the badge a cream backing there */
+body[data-page="verticals"] .badge::before { content: ""; position: absolute; inset: -.35rem; border-radius: 50%; background: var(--cream, #f3f3ec); }

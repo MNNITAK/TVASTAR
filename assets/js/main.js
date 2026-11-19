@@ -314,7 +314,12 @@
     var mmc = gsap.matchMedia();
     mmc.add('(min-width: 768px)', function () {
       var track = $('[data-hs-track]', hs);
-      var dist = function () { return track.scrollWidth - window.innerWidth; };
+      /* width of the panels themselves: scrollWidth would also count decorative text that
+         overhangs the last panel, over-scrolling and leaving an empty strip on the right */
+      var dist = function () {
+        var w = 0; Array.prototype.forEach.call(track.children, function (c) { w += c.offsetWidth; });
+        return Math.max(0, w - window.innerWidth);
+      };
       var hsTween = gsap.to(track, {
         x: function () { return -dist(); }, ease: 'none',
         scrollTrigger: { trigger: hs, start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: true, invalidateOnRefresh: true }
