@@ -107,7 +107,10 @@
     var box = btn.previousElementSibling;
     btn.addEventListener('click', function () {
       var open = btn.getAttribute('aria-expanded') === 'true';
-      box.style.height = (open ? 0 : box.firstElementChild.offsetHeight) + 'px';
+      /* animate between 0 and the full content height; rest at 'auto' so nothing is ever clipped */
+      box.style.height = box.scrollHeight + 'px';
+      if (open) { box.offsetHeight; box.style.height = '0px'; }
+      else setTimeout(function () { if (btn.getAttribute('aria-expanded') === 'true') box.style.height = 'auto'; }, 820);
       btn.setAttribute('aria-expanded', String(!open));
       btn.textContent = open ? 'Read full profile' : 'Show less';
       setTimeout(function () { if (window.ScrollTrigger) ScrollTrigger.refresh(); }, 850);

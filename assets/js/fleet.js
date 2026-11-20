@@ -1,4 +1,5 @@
-/* "Our fleet": a live 3D turntable of the selected machine (models from machines.js).
+/* "Our fleet": a live turntable of the selected machine, drawn as an ink line drawing (models and the
+   drawing renderer are in machines.js).
    Falls back to still renders when WebGL / three.js is unavailable, on phones, or for reduced motion. */
 (function () {
   'use strict';
@@ -8,18 +9,6 @@
   var img = root.querySelector('[data-fleet-img]'), canvas = root.querySelector('[data-fleet-canvas]');
   var nameEl = root.querySelector('[data-fleet-name]');
   var current = null, viewer = null;
-
-  /* count-up when the list first scrolls into view */
-  var counted = false;
-  function countUp() {
-    if (counted) return; counted = true;
-    items.forEach(function (b) {
-      var el = b.querySelector('[data-count]'), to = +el.getAttribute('data-count'), t0 = null;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = to; return; }
-      function step(t) { if (!t0) t0 = t; var p = Math.min(1, (t - t0) / 1400); el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); }
-      requestAnimationFrame(step);
-    });
-  }
 
   function select(key) {
     if (key === current) return; current = key;
@@ -38,23 +27,20 @@
     if (!T || !window.Machines || !canvas || window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
     var renderer;
     try { renderer = new T.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true }); } catch (e) { return null; }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setClearColor(0x000000, 0);
+    var draw;
+    try { draw = window.Machines.drawing(renderer); } catch (e) { return null; }
     var scene = new T.Scene();
-    var sun = window.Machines.studio(renderer, scene);
-    var ground = new T.Mesh(new T.PlaneGeometry(400, 400), new T.ShadowMaterial({ opacity: .26 }));
-    ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
     var cam = new T.PerspectiveCamera(28, 1, .1, 800);
     var pivot = new T.Group(); scene.add(pivot);
     var cache = {}, model = null, rad = 5, cy = 2, az = .7, spinV = .0045, drag = null, grow = 1, visible = false, raf = 0, t0 = performance.now();
 
     function fit() {
       var w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
-      renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
-      var d = rad / Math.sin(cam.fov * Math.PI / 360) * (w / h < 1.15 ? 1.15 : .98), el = .28;
+      var ratio = Math.min(3, Math.max(2, (window.devicePixelRatio || 1) * 1.5));   // supersampled so the lines stay fine and smooth
+      draw.setSize(w, h, ratio, ratio * .45);
+      var d = rad / Math.sin(cam.fov * Math.PI / 360) * (w / h < 1.15 ? 1.1 : .84), el = .28;
+      cam.aspect = w / h; cam.near = Math.max(.5, d - rad * 1.6); cam.far = d + rad * 1.6; cam.updateProjectionMatrix();
       cam.position.set(Math.cos(el) * d, cy + Math.sin(el) * d, 0); cam.lookAt(0, cy * .92, 0);
-      sun.position.set(rad * 1.3, rad * 2.6, rad * 1.5); sun.target.position.set(0, 0, 0);
-      var sc = sun.shadow.camera; sc.left = sc.bottom = -rad * 1.5; sc.right = sc.top = rad * 1.5; sc.near = .1; sc.far = rad * 8; sc.updateProjectionMatrix();
     }
     function show(key) {
       if (model) pivot.remove(model);
@@ -71,7 +57,7 @@
       grow += (1 - grow) * .12;
       pivot.rotation.y = az; pivot.scale.setScalar(.86 + .14 * grow);
       if (model && model.userData.tick) model.userData.tick((now - t0) / 1000);
-      renderer.render(scene, cam);
+      draw.render(scene, cam, rad);
       if (visible) raf = requestAnimationFrame(frame);
     }
     function start() { if (!raf && visible) raf = requestAnimationFrame(frame); }
@@ -84,9 +70,6 @@
     return { show: show };
   }
 
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es, io) { if (es[0].isIntersecting) { countUp(); io.disconnect(); } }, { threshold: .25 }).observe(root);
-  } else countUp();
   viewer = makeViewer();
   select((items[0] && root.getAttribute('data-fleet-start')) || (items[0] && items[0].getAttribute('data-fleet-item')));
 })();

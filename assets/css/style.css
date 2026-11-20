@@ -76,6 +76,9 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 400; }
 .p2 { font-size: .6875rem; line-height: 1.455; }
 .l1 { font-size: .6875rem; line-height: 1.455; letter-spacing: .048em; text-transform: uppercase; font-weight: 600; }
 .l2 { font-size: .5625rem; line-height: 1.333; letter-spacing: .32em; text-transform: uppercase; font-weight: 600; }
+/* address / phone / email values: plain body type, sentence case, sized to sit quietly under their labels */
+.contact_val { font-family: var(--font-body); font-size: .95rem; line-height: 1.55; font-weight: 400; letter-spacing: .01em; text-transform: none; }
+.contact_val a.l2 { display: inline-block; margin-top: .6rem; }
 .c1 { font-family: var(--font-display); font-variation-settings: "wdth" 62.5; font-size: 1.5625rem; line-height: 1.12; letter-spacing: .8em; text-transform: uppercase; }
 .a1 { font-family: var(--font-accent); font-size: 12rem; line-height: 1; text-transform: none; letter-spacing: 0; font-weight: 400; }
 .a2 { font-family: var(--font-accent); font-size: 7.5rem; line-height: 1; text-transform: none; letter-spacing: 0; font-weight: 400; }
@@ -466,6 +469,7 @@ sup.plus { font-family: var(--font-body); font-size: .9rem; vertical-align: supe
 .leader_body .role { margin-bottom: 2rem; }
 .leader_body p + p { margin-top: .9rem; }
 .leader_more { overflow: hidden; height: 0; transition: height .8s cubic-bezier(.6,0,.2,1); }
+.leader_more > div { display: flow-root; }   /* keep the first paragraph's margin inside, so the measured height is the full text */
 .leader_toggle { margin-top: 1.4rem; }
 .gallery { margin-top: 9rem; }
 .gallery_view { position: relative; height: 34rem; overflow: hidden; margin-left: 9rem; }
